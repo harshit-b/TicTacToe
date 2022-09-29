@@ -5,14 +5,13 @@ import './styles/root.scss';
 import { calculateWinner } from './helpers.jsx';
 
 const App = () => {
-  const [history, setHistory] = useState([
-    { board: Array(9).fill(null), turn: false },
-  ]);
+  const NEW_GAME = [{ board: Array(9).fill(null), turn: false }];
+  const [history, setHistory] = useState(NEW_GAME);
   const [currentMove, setCurrentMove] = useState(0);
 
   const current = history[currentMove];
 
-  const winner = calculateWinner(current.board);
+  const { winner, winningSquares } = calculateWinner(current.board);
 
   // const message = winner
   //   ? `Winner is ${winner}`
@@ -51,6 +50,11 @@ const App = () => {
     setCurrentMove(move);
   };
 
+  const startNewGame = () => {
+    setHistory(NEW_GAME);
+    setCurrentMove(0);
+  };
+
   return (
     <div className="app">
       <h1>TIC TAC TOE</h1>
@@ -63,7 +67,15 @@ const App = () => {
           `Next player is ${current.turn ? 'X' : 'O'}`}
         {!winner && noMovesLeft && "It's a DRAW"}{' '}
       </h2>
-      <Board board={current.board} handleSquareClick={handleSquareClick} />
+      <Board
+        board={current.board}
+        handleSquareClick={handleSquareClick}
+        winningSquares={winningSquares}
+      />
+      <button type="button" className="btn" onClick={startNewGame}>
+        {' '}
+        New Game{' '}
+      </button>
       <History history={history} moveTo={moveTo} currentMove={currentMove} />
     </div>
   );

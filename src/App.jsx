@@ -14,9 +14,11 @@ const App = () => {
 
   const winner = calculateWinner(current.board);
 
-  const message = winner
-    ? `Winner is ${winner}`
-    : `Next player is ${current.turn ? 'X' : 'O'}`;
+  // const message = winner
+  //   ? `Winner is ${winner}`
+  //   : `Next player is ${current.turn ? 'X' : 'O'}`;
+
+  const noMovesLeft = current.board.every(el => el !== null);
 
   const handleSquareClick = position => {
     if (current.board[position] || winner) {
@@ -53,7 +55,14 @@ const App = () => {
     <div className="app">
       <h1>TIC TAC TOE</h1>
       <br />
-      <h2> {message} </h2>
+      <h2>
+        {' '}
+        {winner && `Winner is ${winner}`}
+        {!winner &&
+          !noMovesLeft &&
+          `Next player is ${current.turn ? 'X' : 'O'}`}
+        {!winner && noMovesLeft && "It's a DRAW"}{' '}
+      </h2>
       <Board board={current.board} handleSquareClick={handleSquareClick} />
       <History history={history} moveTo={moveTo} currentMove={currentMove} />
     </div>

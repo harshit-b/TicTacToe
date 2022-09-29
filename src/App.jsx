@@ -4,37 +4,44 @@ import './styles/root.scss';
 import { calculateWinner } from './helpers.jsx';
 
 const App = () => {
-  const [board, setBoard] = useState(Array(9).fill(null));
-  const [turn, setTurn] = useState(1);
+  const [history, setHistory] = useState([
+    { board: Array(9).fill(null), turn: false },
+  ]);
+  const [currentMove, setCurrentMove] = useState(0);
 
-  const winner = calculateWinner(board);
+  const current = history[currentMove];
+
+  const winner = calculateWinner(current.board);
 
   const message = winner
     ? `Winner is ${winner}`
-    : `Next player is ${turn ? 'X' : 'O'}`;
+    : `Next player is ${current.turn ? 'X' : 'O'}`;
 
   const handleSquareClick = position => {
-    if (board[position] || winner) {
+    if (current.board[position] || winner) {
       return;
     }
 
-    setBoard(prev => {
-      return prev.map((square, pos) => {
-        if (pos === position) {
-          if (turn === 1) {
-            setTurn(0);
-            return 'X';
-          }
+    setHistory(prev => {
+      const last = prev[prev.length - 1];
+      console.log(last.board);
 
-          setTurn(1);
-          return 'O';
+      const newBoard = last.board.map((square, pos) => {
+        if (pos === position) {
+          return last.turn ? 'X' : 'O';
         }
 
         return square;
       });
+
+      console.log(newBoard);
+
+      return prev.concat({ board: newBoard, turn: !last.turn });
       // prev[position] = 'X';
       // return prev;
     });
+
+    setCurrentMove(prev => prev + 1);
   };
 
   return (
@@ -42,7 +49,7 @@ const App = () => {
       <h1>TIC TAC TOE</h1>
       <br />
       <h2> {message} </h2>
-      <Board board={board} handleSquareClick={handleSquareClick} />
+      <Board board={current.board} handleSquareClick={handleSquareClick} />
     </div>
   );
 };

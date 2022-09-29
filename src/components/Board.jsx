@@ -2,7 +2,6 @@ import React from 'react';
 import Square from './Square.jsx';
 
 const Board = ({ board, handleSquareClick }) => {
-  console.log(board);
   const renderSquare = position => {
     return (
       <Square

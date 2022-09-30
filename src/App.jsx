@@ -57,26 +57,47 @@ const App = () => {
 
   return (
     <div className="app">
-      <h1>TIC TAC TOE</h1>
+      <h1>
+        TIC <span className="text-green"> TAC </span> TOE
+      </h1>
       <br />
-      <h2>
-        {' '}
-        {winner && `Winner is ${winner}`}
-        {!winner &&
-          !noMovesLeft &&
-          `Next player is ${current.turn ? 'X' : 'O'}`}
-        {!winner && noMovesLeft && "It's a DRAW"}{' '}
-      </h2>
+      <div className="status-message">
+        {winner && (
+          <>
+            Winner is{' '}
+            <span className={winner === 'X' ? 'text-green' : 'text-orange'}>
+              {' '}
+              {winner}{' '}
+            </span>
+          </>
+        )}
+        {!winner && !noMovesLeft && (
+          <>
+            Next player is{' '}
+            <span className={current.turn ? 'text-green' : 'text-orange'}>
+              {' '}
+              {current.turn ? 'X' : 'O'}{' '}
+            </span>
+          </>
+        )}
+
+        {!winner && noMovesLeft && "It's a DRAW"}
+      </div>
       <Board
         board={current.board}
         handleSquareClick={handleSquareClick}
         winningSquares={winningSquares}
       />
-      <button type="button" className="btn" onClick={startNewGame}>
-        {' '}
-        New Game{' '}
+      <button
+        type="button"
+        className={`btn-reset ${winner ? 'active' : ''}`}
+        onClick={startNewGame}
+      >
+        New Game
       </button>
+      <h2 style={{ fontWeight: 'normal' }}> Current Game History </h2>
       <History history={history} moveTo={moveTo} currentMove={currentMove} />
+      <div className="bg-balls" />
     </div>
   );
 };
